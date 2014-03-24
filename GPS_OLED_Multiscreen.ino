@@ -1,7 +1,8 @@
 /*********************************************************************
 This sketch interfaces a 128x64 Monochrome OLED based on SSD1306 drivers
 to interface Adafruit's Ultimate GPS and displaying location information
-to the tiny OLED display.
+to the tiny OLED display. The sketch includes the provision to use either
+hardware or software method to attached GPS unit.
 
   Pick up an OLED display in the adafruit shop!
   ------> http://www.adafruit.com/category/63_98
@@ -34,7 +35,7 @@ Wiring:
    If using hardware TX/RX
       Connect the GPS TX (transmit) pin to Arduino RX1 (Digital 0)
       Connect the GPS RX (receive) pin to matching TX1 (Digital 1)   
-   Else Software Serial(TX,RX)  ----this sketch 
+   Else Software Serial(TX,RX)  
       Connect the GPS TX (transmit) pin to Arduino 8 (Arduino RX)
       Connect the GPS RX (receive) pin to matching 7 (Arduino TX  
 
@@ -95,7 +96,7 @@ Adafruit_SSD1306 OLED(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 
 // Contstants
-const int ledPin = 4;
+const int ledPin = 4;         // lights to inform on GPS fix and flashes for button presses
 const int buttonPin = 5;      // button to toggle display screens
 
 // Variables
@@ -385,15 +386,6 @@ void loop()
       buttonPushCounter =0;
       break; 
     }
-     
-      // Display Speed Screen
-      //Display_Speed();
-        
-      //Display Full GPS Information
-      //Display_Time();
-        
-      //Display Full GPS Information
-      //Display_GPS();
 }
 
     // No GPS fix yet so 
