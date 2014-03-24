@@ -341,7 +341,7 @@ void loop()
  
    
     // read the pushbutton input pin:
-    buttonState = digitalRead(buttonPin);
+    buttonState = digitalRead(buttonPin);  // buttonpress results on LOW since using pull-up for pin
     
     // compare the buttonState to its previous state
     if (buttonState != lastButtonState) {
