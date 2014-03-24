@@ -2,21 +2,11 @@
 This sketch interfaces a 128x64 Monochrome OLED based on SSD1306 drivers
 to interface Adafruit's Ultimate GPS and displaying location information
 to the tiny OLED display. The sketch includes the provision to use either
-hardware or software method to attached GPS unit.
-
-  Pick up an OLED display in the adafruit shop!
-  ------> http://www.adafruit.com/category/63_98
-
-  Pick up the high performing Ultimate v3 GPS in the adafruit shop!
-  ------> http://www.adafruit.com/products/746
+hardware or software method to attached GPS unit and provides the ability
+to cycle thru three information screens -time, speed, and location.
 
 This example is for a 128x64 size display using SPI to communicate.
-Adafruit invests time and resources providing this open source code, 
-please support Adafruit and open-source hardware by purchasing 
-products from Adafruit!
 
-BSD license, check license.txt for more information
-All text above, and the splash screen must be included in any redistribution
 
 Author: Bryce Jones
 Date: 20 MAR 2014
@@ -25,6 +15,19 @@ Required hardware:
   -Arduino (This sketch was developed on an Arduino Micro)
   -Adafruit Ultimate GPS v3
   -Adafruit SSD1306 128x64 OLED display(SPI)
+
+  Adafruit is a fantastic software and hardware resource for the maker
+  community. I encourage supporting them by purchasing your project 
+  materials from the them. Adafruit invests time and resources providing
+  open source code, please support Adafruit and open-source hardware by 
+  purchasing products from Adafruit! http://www.adafruit.com 
+
+  Pick up an OLED display in the adafruit shop!
+  ------> http://www.adafruit.com/category/63_98
+
+  Pick up the high performing Ultimate v3 GPS in the adafruit shop!
+  ------> http://www.adafruit.com/products/746
+
 
 Wiring:
 
@@ -36,8 +39,8 @@ Wiring:
       Connect the GPS TX (transmit) pin to Arduino RX1 (Digital 0)
       Connect the GPS RX (receive) pin to matching TX1 (Digital 1)   
    Else Software Serial(TX,RX)  
-      Connect the GPS TX (transmit) pin to Arduino 8 (Arduino RX)
-      Connect the GPS RX (receive) pin to matching 7 (Arduino TX  
+      Connect the GPS TX (transmit) pin to Arduino  Micro TX pin8
+      Connect the GPS RX (receive) pin to Arduino Micro TX pin7  
 
    Connections for the Adafruit 128x64 SPI OLED
    ===========
@@ -50,11 +53,8 @@ Wiring:
    Connect OLED_GROUND to common ground
 
 
-Special Notes: This sketch is very close to exceeding the OLED buffer
-and when you do, then the serial data from the GPS will not be received
-and the symptom is displaying NO GPS Fix!! Frustrating to debug.
-
-This sketch uses a modified Adafruit's GPS library to allow reading the
+Special Notes: 
+This sketch uses a modified Adafruit GPS library to allow reading the
 status of the GPS antenna to determine if the GPS is using the onboard ceramic
 antenna, the external active antenna, or if there is an antenna short creating
 a fault. 
@@ -114,6 +114,7 @@ void Flash_LED()
    digitalWrite(ledPin, LOW);    // turn the LED off 
    digitalWrite(ledPin, LOW);    // turn the LED off
 }   
+
    
 void OLED_Setup()
 {
@@ -222,7 +223,7 @@ void Display_Speed()
         OLED.setCursor(100,56);
         OLED.print("TME");
         OLED.display();
-}
+}  // end of display GPS speed class
 
 void Display_Time() 
 {
@@ -242,7 +243,7 @@ void Display_Time()
         OLED.print(GPS.minute, DEC); OLED.print(':');
         OLED.print(GPS.seconds, DEC); OLED.print('.');   
         OLED.display();
-}
+}  // end of display GPS time class
 
 void Display_GPS() 
 {
@@ -291,7 +292,7 @@ void Display_GPS()
            }
          
         OLED.display();
-}
+}  // end of display GPS location class
 
 
 
@@ -299,9 +300,11 @@ void Display_GPS()
 void setup()  
 { 
   
-  
   // initialize the digital pin as an output.
   pinMode(ledPin, OUTPUT);
+ 
+  // initialize serial console connection
+  // Serial.begin(115200);
  
   //configure pin as an input and enable the internal pull-up resistor
   pinMode(buttonPin, INPUT_PULLUP);
@@ -311,10 +314,8 @@ void setup()
 
   // initialize GPS recevier
   GPS_Setup();
-  
-  // initialize serial connection
-  //Serial.begin(115200);
-}
+
+} // end of main setup
 
 
 
