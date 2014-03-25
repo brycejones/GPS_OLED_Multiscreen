@@ -78,12 +78,12 @@ void Display_GPS();
 void Flash_LED();
 
 
-// mySerial Object
-//SoftwareSerial mySerial(8, 7);
+// Software Serial (mySerial) Object
+//SoftwareSerial GPSSerial(8, 7);
 
-// GPS Object
+// GPS Object (Leonardo hardware serial=serial1)
 Adafruit_GPS GPS(&Serial1);
-//Adafruit_GPS GPS(&mySerial);
+//Adafruit_GPS GPS(&GPSSerial);
 
 
 // OLED Object
@@ -96,8 +96,10 @@ Adafruit_SSD1306 OLED(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 
 // Contstants
-const int ledPin = 4;         // lights to inform on GPS fix and flashes for button presses
-const int buttonPin = 5;      // button to toggle display screens
+static const int ledPin = 4;           // lights to inform on GPS fix and flashes for button presses
+static const int buttonPin = 5;        // button to toggle display screens
+static const uint32_t GPSBaud = 9600;  // GPS Baud rate, normally 4800 baud
+
 
 // Variables
 uint32_t timer = millis();   // timer
@@ -110,9 +112,9 @@ int lastButtonState = 0;     // previous state of the button
 void Flash_LED()
 {
    digitalWrite(ledPin, LOW);    // turn the LED off
+   digitalWrite(ledPin, HIGH);    // turn the LED off 
    digitalWrite(ledPin, LOW);    // turn the LED off 
-   digitalWrite(ledPin, LOW);    // turn the LED off 
-   digitalWrite(ledPin, LOW);    // turn the LED off
+   digitalWrite(ledPin, HIGH);    // turn the LED off
 }   
 
    
@@ -140,7 +142,7 @@ void OLED_Setup()
 void GPS_Setup()   // Initialize GPS receiver with BAUD rate, NMEA string format.
 {
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
-  GPS.begin(9600);
+  GPS.begin(GPSBaud);
   
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   // required for number of SATS and altitude.
@@ -167,7 +169,7 @@ void GPS_Setup()   // Initialize GPS receiver with BAUD rate, NMEA string format
   //    3. Using Active Antenna   $PGTOP,11,3*6F
   //  
   //GPS.sendCommand(PGTOP_ANTENNA);    // optional Antenna status
-  delay(1000);
+  delay(500);
   
   // Ask for firmware version
   //mySerial.println(PMTK_Q_RELEASE);
@@ -232,12 +234,12 @@ void Display_Time()
         OLED.clearDisplay();        
         OLED.setCursor(0,0);
         //display GPS date
-        OLED.print("Date: ");
+        OLED.print(F("Date: "));
         OLED.print(GPS.month, DEC); OLED.print('/');
         OLED.print(GPS.day, DEC); OLED.print("/20");
         OLED.print(GPS.year, DEC);
         //display GPS time
-        OLED.print("\n\nUTC Time: \n\n");  
+        OLED.print(F("\n\nUTC Time: \n\n"));  
         OLED.setTextSize(2);      
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
@@ -251,40 +253,38 @@ void Display_GPS()
         OLED.setTextColor(WHITE);
         OLED.clearDisplay();        
         OLED.setCursor(0,0);
-        OLED.print("GPS DATA   ");
+        OLED.print(F("GPS DATA   "));
         OLED.print(GPS.month, DEC); OLED.print('/');
         OLED.print(GPS.day, DEC); OLED.print("/20");
         OLED.print(GPS.year, DEC);
-        OLED.print("\nUTC Time: ");        
+        OLED.print(F("\nUTC Time: "));        
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
         OLED.print(GPS.seconds, DEC); OLED.print('.');   
-        OLED.print("\n");
-        OLED.print("Lat: ");
+        OLED.print(F("\nLat: "));
         OLED.print(GPS.latitude, 4); OLED.print(GPS.lat);
-        OLED.print("\n");
-        OLED.print("Lon: "); 
+        OLED.print(F("\nLon: ")); 
         OLED.print(GPS.longitude, 4); OLED.print(GPS.lon);
         OLED.print("\n");
         
-        OLED.print("Speed(mph): "); OLED.print(GPS.speed * 1.15078);OLED.print("\n");  // Convert Knots to MPH
+        OLED.print(F("Speed(mph)")); OLED.print(GPS.speed * 1.15078);OLED.print("\n");  // Convert Knots to MPH
         //OLED.print("Angle: "); OLED.print(GPS.angle);OLED.print("\n");
-        OLED.print("Altitude: "); OLED.print(GPS.altitude);OLED.print(" m\n");
-        OLED.print("Satellites: "); OLED.print((int)GPS.satellites);
-        OLED.print("\nAntenna: ");
+        OLED.print(F("Altitude: ")); OLED.print(GPS.altitude);OLED.print(" m\n");
+        OLED.print(F("Satellites: ")); OLED.print((int)GPS.satellites);
+        OLED.print(F("\nAntenna: "));
         OLED.print(GPS.antennastatus, DEC);
         
         // human readable antenna status, commented out to conserve memory
         
         switch ( int(GPS.antennastatus) ) {
            case 1:
-              OLED.print(" Bad");        // Fault with Antenna, shorted
+              OLED.print(F(" Bad"));        // Fault with Antenna, shorted
            break;
            case 2:
-              OLED.print(" Int");        // GPS using internal ceramic antenna
+              OLED.print(F(" Int"));        // GPS using internal ceramic antenna
            break;
            case 3:
-              OLED.print(" Active");     // GPS using active antenna
+              OLED.print(F(" Active"));     // GPS using active antenna
            break;     
            default:
            // Get out of here
