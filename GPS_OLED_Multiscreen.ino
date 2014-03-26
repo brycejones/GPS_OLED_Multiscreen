@@ -75,7 +75,6 @@ void OLED_Setup();
 void Display_Speed();
 void Display_Time();
 void Display_GPS();
-void Flash_LED();
 
 
 // Software Serial (mySerial) Object
@@ -108,14 +107,6 @@ int buttonPushCounter = 0;   // counter for the number of button presses
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
 
-
-void Flash_LED()
-{
-   digitalWrite(ledPin, LOW);    // turn the LED off
-   digitalWrite(ledPin, HIGH);    // turn the LED off 
-   digitalWrite(ledPin, LOW);    // turn the LED off 
-   digitalWrite(ledPin, HIGH);    // turn the LED off
-}   
 
    
 void OLED_Setup()
@@ -182,7 +173,7 @@ void GPS_Setup()   // Initialize GPS receiver with BAUD rate, NMEA string format
 
 
 
-// Read in and tick the GPS class
+// GPS class -read in GPS serial NMEA string(s)
 void GPS_Tick()
 {
   // 'hand query' the GPS for new data  
@@ -193,6 +184,7 @@ void GPS_Tick()
   if (GPS.newNMEAreceived()) 
   {
       if (!GPS.parse(GPS.lastNMEA()))   // this also sets the newNMEAreceived() flag to false
+        
        return;  // we can fail to parse a sentence in which case we should just wait for another
   }
 }  // end of tick class
@@ -243,7 +235,12 @@ void Display_Time()
         OLED.setTextSize(2);      
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
-        OLED.print(GPS.seconds, DEC); OLED.print('.');   
+        OLED.print(GPS.seconds, DEC); //OLED.print('.');
+        
+        OLED.setTextSize(1);
+        OLED.print(F("\n\n\nGPS.fix="));        
+        OLED.print(GPS.fix, DEC);OLED.print(GPS.fixquality, DEC);
+        //OLED.print(GPS.milliseconds, DEC);    
         OLED.display();
 }  // end of display GPS time class
 
@@ -257,10 +254,11 @@ void Display_GPS()
         OLED.print(GPS.month, DEC); OLED.print('/');
         OLED.print(GPS.day, DEC); OLED.print("/20");
         OLED.print(GPS.year, DEC);
-        OLED.print(F("\nUTC Time: "));        
+        OLED.print(F("\nUTC Time:"));        
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
-        OLED.print(GPS.seconds, DEC); OLED.print('.');   
+        OLED.print(GPS.seconds, DEC); //OLED.print('.');
+        //OLED.print(GPS.milliseconds, DEC);   
         OLED.print(F("\nLat: "));
         OLED.print(GPS.latitude, 4); OLED.print(GPS.lat);
         OLED.print(F("\nLon: ")); 
@@ -335,24 +333,22 @@ void loop()
     // Reset the timer
     timer = millis(); 
   
-    // If GPS FIX then display data. NOTE: this very close to exceeding display buffer!!
+    // If GPS FIX then proceed. 
     if (GPS.fix > 0) 
     {
-    digitalWrite(ledPin, HIGH);      // turn the LED on (HIGH is the voltage level)
- 
-   
+    digitalWrite(ledPin, HIGH);
     // read the pushbutton input pin:
     buttonState = digitalRead(buttonPin);  // buttonpress results on LOW since using pull-up for pin
     
     // compare the buttonState to its previous state
     if (buttonState != lastButtonState) {
-      Flash_LED();   // visual indicator button was pushed
+      digitalWrite(ledPin, LOW); // visual indicator button was pushed
       // if the state has changed, increment the counter
       if (buttonState == LOW) {
         // if the current state is LOW then the button
         // was pushed. This sketch uses PULLUP so button press is LOW
         buttonPushCounter++;
-        //So we will increment erial.println("on");
+        //So we will increment serial.println("on");
         //Serial.print("number of button pushes:  ");
         //Serial.println(buttonPushCounter);
       } 
