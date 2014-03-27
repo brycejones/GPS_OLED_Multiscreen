@@ -207,15 +207,15 @@ void Display_Speed()
         OLED.setTextSize(1);
         OLED.setTextColor(BLACK);
         // draw UI rectangles
-        OLED.fillRect(10,56,20,10, WHITE);
-        OLED.fillRect(60,56,20,10, WHITE);
-        OLED.fillRect(100,56,20,10,WHITE);        
+        OLED.fillRect(8,55,20,10, WHITE);
+        OLED.fillRect(53,55,20,10, WHITE);
+        OLED.fillRect(98,55,20,10,WHITE);        
         OLED.setCursor(10,56);
         OLED.print("SPD");
-        OLED.setCursor(60,56);       
-        OLED.print("FUL");
-        OLED.setCursor(100,56);
+        OLED.setCursor(55,56);       
         OLED.print("TME");
+        OLED.setCursor(100,56);
+        OLED.print("LOC");
         OLED.display();
 }  // end of display GPS speed class
 
@@ -235,12 +235,13 @@ void Display_Time()
         OLED.setTextSize(2);      
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
-        OLED.print(GPS.seconds, DEC); //OLED.print('.');
-        
+        OLED.print(GPS.seconds, DEC); OLED.print('\n');
         OLED.setTextSize(1);
-        OLED.print(F("\n\n\nGPS.fix="));        
-        OLED.print(GPS.fix, DEC);OLED.print(GPS.fixquality, DEC);
-        //OLED.print(GPS.milliseconds, DEC);    
+        OLED.print(GPS.milliseconds);        
+        OLED.print(F("\nGPS.fix="));        
+        OLED.print(GPS.fix, DEC);
+        OLED.print(F(" GPS.Q="));
+        OLED.print(GPS.fixquality, DEC);
         OLED.display();
 }  // end of display GPS time class
 
@@ -258,7 +259,7 @@ void Display_GPS()
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
         OLED.print(GPS.seconds, DEC); //OLED.print('.');
-        //OLED.print(GPS.milliseconds, DEC);   
+        OLED.print(GPS.milliseconds, DEC);   
         OLED.print(F("\nLat: "));
         OLED.print(GPS.latitude, 4); OLED.print(GPS.lat);
         OLED.print(F("\nLon: ")); 
