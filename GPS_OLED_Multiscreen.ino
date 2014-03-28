@@ -258,8 +258,8 @@ void Display_GPS()
         OLED.print(F("\nUTC Time:"));        
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
-        OLED.print(GPS.seconds, DEC); //OLED.print('.');
-        OLED.print(GPS.milliseconds, DEC);   
+        OLED.print(GPS.seconds, DEC); OLED.print('.');
+        OLED.print(GPS.milliseconds);   
         OLED.print(F("\nLat: "));
         OLED.print(GPS.latitude, 4); OLED.print(GPS.lat);
         OLED.print(F("\nLon: ")); 
