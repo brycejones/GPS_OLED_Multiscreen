@@ -1,4 +1,4 @@
-### Arduino MICRO / OLED GPS Inforamtion
+### Arduino MICRO / OLED GPS Information
 
 This Arduino sketch combines the use of an Arduino Micro, Adafruit's GPSv3, and 128x64
 OLED. The sketch provides the ability to cycle thru multiple screens on the OLED 
