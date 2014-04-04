@@ -6,6 +6,6 @@ display. Screens include a simple Speed (MPH), UTC time, and finally a comprehen
 display of the GPS complete information formatted for display. Displayed information
 includes received GPS time, date, location, satellites in view and antenna status.
 
-Note: By default this sketch uses the Leonardo/ Micro's serial UART Serial1. Provisions are included to easily modify the sketch to use software serial. 
+Note: By default this sketch uses the Leonardo/ Micro's serial UART Serial1.
 
 --brycej

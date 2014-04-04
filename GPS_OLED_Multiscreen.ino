@@ -80,8 +80,9 @@ void Display_GPS();
 // Software Serial (mySerial) Object
 //SoftwareSerial GPSSerial(8, 7);
 
-// GPS Object (Leonardo hardware serial=serial1)
-Adafruit_GPS GPS(&Serial1);
+// GPS Object
+Adafruit_GPS GPS(&Serial1);       // used for Leonardo and Micro 
+//Adafruit_GPS GPS(&Serial);      // used for Arduino UNO
 //Adafruit_GPS GPS(&GPSSerial);
 
 
@@ -231,7 +232,7 @@ void Display_Time()
         OLED.print(GPS.day, DEC); OLED.print("/20");
         OLED.print(GPS.year, DEC);
         //display GPS time
-        OLED.print(F("\n\nUTC Time: \n\n"));  
+        OLED.print(F("\n\nUTC Time:\n\n"));  
         OLED.setTextSize(2);      
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
@@ -255,7 +256,7 @@ void Display_GPS()
         OLED.print(GPS.month, DEC); OLED.print('/');
         OLED.print(GPS.day, DEC); OLED.print("/20");
         OLED.print(GPS.year, DEC);
-        OLED.print(F("\nUTC Time:"));        
+        OLED.print(F("\nUTC:"));        
         OLED.print(GPS.hour, DEC); OLED.print(':');
         OLED.print(GPS.minute, DEC); OLED.print(':');
         OLED.print(GPS.seconds, DEC); OLED.print('.');
